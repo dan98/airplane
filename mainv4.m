@@ -53,7 +53,7 @@ l = cell(1,3);
 l{1}='Real State'; l{2}='Observer'; l{3}='Error';
 
 
-[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.05:10), z0);
+[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.01:10), z0);
 %[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
 
 inputs = F*zt(:, 1:6)';
@@ -76,10 +76,8 @@ asizes = 1.5 * [-1 1 -1 1];
 lwing = [-0.5; 0];
 rwing = [0.5; 0];
 
+frame = struct('cdata', cell(1,length(t)), 'colormap', cell(1,length(t)));
 
-v = VideoWriter('firsttest.avi');
-open(v);
-frame = struct('cdata', cell(1,length(1)), 'colormap', cell(1,length(1)));
 
 parfor i = 1:length(t)
 
@@ -189,12 +187,6 @@ parfor i = 1:length(t)
 	%pause(0.001);
 	frame(i) = getframe(gcf);
 end
-
-for i=1:length(frame)
-	writeVideo(v, frame(i));
-end
-
-close(v);
 
 close all
     
