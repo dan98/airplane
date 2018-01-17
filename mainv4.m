@@ -54,7 +54,7 @@ l = cell(1,3);
 l{1}='Real State'; l{2}='Observer'; l{3}='Error';
 
 
-[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
+[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.01:10), z0);
 %[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
 
 inputs = F*zt(:, 1:6)';
@@ -78,18 +78,21 @@ lwing = [-0.5; 0];
 rwing = [0.5; 0];
 
 
-v = VideoWriter('firsttest.mp4');
+v = VideoWriter('firsttest.avi');
 open(v);
 
 
 for i = 1:length(t)
+
+	disp(sprintf('%.1f percent', 100*(i/length(t))));
+
 	syst = zt(i, 1:6)';
 	obst = zt(i, 7:12)';
 
-    output=C*syst;
+	output=C*syst;
 
-    x = output(1)/mxy;
-    y = output(2)/mxy;
+	x = output(1)/mxy;
+	y = output(2)/mxy;
 	theta = output(3);
 	coord = x + y*1i;
 
@@ -177,9 +180,9 @@ for i = 1:length(t)
 	subplot(4,4,[15,16]);
 	ref = barh([syst(6)], 'grouped');
 	set(gca, 'yticklabel', {'$\dot{\theta}$'}); 
-    xlim([-mtd mtd]);
+	xlim([-mtd mtd]);
 	title('Centripetal acceleration');
-	legend(ref, {'system', 'observer'});
+	legend(ref, {'system'});
 	set(gca, 'fontsize', 20);
 
 	%drawnow;
