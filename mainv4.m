@@ -3,7 +3,6 @@ set(groot, 'defaultAxesTickLabelInterpreter','latex');
 set(groot, 'defaultLegendInterpreter','latex');  
 close all
 clc
-figure('Position', [10 10 1000 1000]);
 m=4; %mass
 J=0.0475; %intertia
 r=0.25; %thrust offset
@@ -54,7 +53,7 @@ l = cell(1,3);
 l{1}='Real State'; l{2}='Observer'; l{3}='Error';
 
 
-[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.01:10), z0);
+[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.5:10), z0);
 %[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
 
 inputs = F*zt(:, 1:6)';
@@ -80,11 +79,12 @@ rwing = [0.5; 0];
 
 v = VideoWriter('firsttest.avi');
 open(v);
+frame = struct('cdata', cell(1,length(1)), 'colormap', cell(1,length(1)));
 
-
-for i = 1:length(t)
+parfor i = 1:length(t)
 
 	disp(sprintf('%.1f percent', 100*(i/length(t))));
+	figure('Position', [10 10 1000 1000]);
 
 	syst = zt(i, 1:6)';
 	obst = zt(i, 7:12)';
@@ -187,8 +187,11 @@ for i = 1:length(t)
 
 	%drawnow;
 	%pause(0.001);
-	frame = getframe(gcf);
-	writeVideo(v, frame);
+	frame(i) = getframe(gcf);
+end
+
+for i=1:length(frame)
+	writeVideo(v, frame(i));
 end
 
 close(v);
