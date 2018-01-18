@@ -27,7 +27,7 @@ B=[0,0;
 % x_0, y_0, th_0, xd_0, yd_0, thd_0
 
 % Initial conditions
-time = (0:0.1:10);
+time = (0:0.01:10);
 sys0 = [10; 10; -pi/2; 0; 0; 0];
 obs0 = [0; 0; 0; 0; 0; 0];
 
@@ -220,6 +220,6 @@ for i = 1:length(t)
 	frame(i) = getframe(gcf);
 end
 
-frames2video(frame, 'genvideo')
+frames2video(frame, 'genvideo2')
 
 close all
