@@ -27,7 +27,7 @@ B=[0,0;
 % x_0, y_0, th_0, xd_0, yd_0, thd_0
 
 % Initial conditions
-sys0 = [4; 4; 12*pi; 0; 0; 0];
+sys0 = [10; 10; -pi/2; 0; 0; 0];
 obs0 = [0; 0; 0; 0; 0; 0];
 
 z0 = [sys0; obs0];
@@ -53,10 +53,12 @@ l = cell(1,3);
 l{1}='Real State'; l{2}='Observer'; l{3}='Error';
 
 
-[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.5:10), z0);
-%[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
+%[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.1:10), z0);
+[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.1:10), z0);
+
 
 inputs = F*zt(:, 1:6)';
+inputs(2, :) = inputs(2, :) + m*g;
 outputs = C*zt(:, 1:6)';
 
 maxain = max(abs(inputs'));
@@ -78,11 +80,12 @@ rwing = [0.5; 0];
 
 frame = struct('cdata', cell(1,length(t)), 'colormap', cell(1,length(t)));
 
+%figure('Position', [0 0 1024 1024]);
+figure('Position', [0 0 1024 1024]);
 
-parfor i = 1:length(t)
+for i = 1:length(t)
 
 	disp(sprintf('%.1f percent', 100*(i/length(t))));
-	figure('Position', [10 10 1000 1000], 'Visible', 'off');
 
 	syst = zt(i, 1:6)';
 	obst = zt(i, 7:12)';
@@ -187,6 +190,8 @@ parfor i = 1:length(t)
 	%pause(0.001);
 	frame(i) = getframe(gcf);
 end
+
+frames2video(frame, 'genvideo')
 
 close all
     
