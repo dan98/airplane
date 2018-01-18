@@ -83,7 +83,7 @@ gray = [200 200 200]/256;
 frame = struct('cdata', cell(1,length(t)), 'colormap', cell(1,length(t)));
 
 %figure('Position', [0 0 1024 1024]);
-figure('Position', [0 0 1024 1024]);
+figure('Position', [0 0 1024 1024], 'Visible' , 'off');
 
 for i = 1:length(t)
 
