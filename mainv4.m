@@ -53,7 +53,7 @@ l = cell(1,3);
 l{1}='Real State'; l{2}='Observer'; l{3}='Error';
 
 
-[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.01:10), z0);
+[t, zt] = ode45(@(t, z) linodefun(t, z, A, B, C, F, G), (0:0.5:10), z0);
 %[t, zt] = ode45(@(t, z) nonlinodefun(t, z, A, B, C, F, G), (0:0.02:10), z0);
 
 inputs = F*zt(:, 1:6)';
@@ -82,7 +82,7 @@ frame = struct('cdata', cell(1,length(t)), 'colormap', cell(1,length(t)));
 parfor i = 1:length(t)
 
 	disp(sprintf('%.1f percent', 100*(i/length(t))));
-	figure('Position', [10 10 1000 1000]);
+	figure('Position', [10 10 1000 1000], 'Visible', 'off');
 
 	syst = zt(i, 1:6)';
 	obst = zt(i, 7:12)';
