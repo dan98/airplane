@@ -1,7 +1,7 @@
 function frames2video(frames, filename)
 	nr = length(frames);
-	v = VideoWriter(filename);
-	v.FileFormat = 'mp4';
+	v = VideoWriter(filename, 'MPEG-4');
+	%v.FileFormat = 'mp4';
 	v.Quality = 100;
 	v.FrameRate =nr/10;
 	open(v);
